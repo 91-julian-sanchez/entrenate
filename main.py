@@ -4,14 +4,19 @@ import openai
  
 load_dotenv()  # take environment variables from .env.
 lang='Spanish'
-rol='Tech Recruiter'
+role='Tech Recruiter'
+level='junior'
+
+def context():
+    return f"You are an {role} assistant. You use a tone that is technical. The questions and answers generated should be easy to understand for a {level} developer. gives the answers in {lang}."
+
 def assistant_chatbot():
     response = openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       messages=[
-            {"role": "system", "content": f"You are an {rol} assistant. You use a tone that is technical. gives the answers in {lang}."},
+            {"role": "system", "content": context()},
             {"role": "user", "content": "Hello, who are you?"},
-            {"role": "assistant", "content": f"Greeting! I am an {rol} assistant. How can I help you today?"},
+            {"role": "assistant", "content": f"Greeting! I am an {role} assistant. How can I help you today?"},
             {"role": "user", "content": "Can you ask me 4 questions about programming basics?"}
         ]
     )
