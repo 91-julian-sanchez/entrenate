@@ -20,14 +20,20 @@ def select_questions():
         return False
     return answers['preguntas']
 
-while True:
-    selected_options = select_questions()
-    if not selected_options:
-        console.print("❌ [bold red]Error: selecciona una opción válida.[/bold red]\n ")
-        continue
-    else:
-        break
+def run():
+    while True:
+        selected_options = select_questions()
+        if not selected_options:
+            console.print("❌ [bold red]Error: selecciona una opción válida.[/bold red]\n ")
+            continue
+        else:
+            break
 
-console.print("[green]👍 Opciones seleccionadas: [/green]")
-for opcion in selected_options:
-    console.print(f"  - {choices_dict[opcion]} ")
+    console.print("[green]👍 Opciones seleccionadas: [/green]")
+    for opcion in selected_options:
+        console.print(f"  - {choices_dict[opcion]} ")
+        
+    return selected_options
+
+if __name__ == '__main__':
+    run()
