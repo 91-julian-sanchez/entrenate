@@ -32,8 +32,9 @@ def run():
     console.print("[green]👍 Opciones seleccionadas: [/green]")
     for opcion in selected_options:
         console.print(f"  - {choices_dict[opcion]} ")
-        
+    console.print("\n")
+
     return selected_options
 
 if __name__ == '__main__':
-    run()
+    print(run())
