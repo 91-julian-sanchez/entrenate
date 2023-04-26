@@ -30,7 +30,6 @@ def __chat_completion_create(messages):
         messages=messages
     )
     response_content = response.choices[0].message.content
-    print(f"{response_content}\n")
     return response_content
     
 def handle_user_response(type_question, messages):
@@ -52,9 +51,11 @@ def assistant_chatbot(selected_type_question):
         if os.getenv('ASSISTANT_ENABLED') == 'True':
             messages.append({"role": "user", "content": user_question(type_question[1])})
             response_content = __chat_completion_create(messages)
+            print(f"{response_content}\n")
             messages.append({"role": "assistant", "content": response_content})
             messages = handle_user_response(type_question[1], messages)
-            __chat_completion_create(messages)
+            response_content = __chat_completion_create(messages)
+            print(f"💻💬 {response_content}\n")
 
 if __name__ == '__main__':
     openai.api_key = os.getenv("CHATGPT_API_KEY")
