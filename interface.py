@@ -58,8 +58,11 @@ def prompt_multiple_choice_answer() -> str:
     return answers['multiple_choice']
 
 def prompt_short_answer() -> str:
-    prompt = input()
-    return prompt
+    questions = [
+        inquirer.Text('short_answer', message="?"),
+    ]
+    answers = inquirer.prompt(questions)
+    return answers['short_answer']
 
 if __name__ == '__main__':
     print(interfaz_select_question_types())
