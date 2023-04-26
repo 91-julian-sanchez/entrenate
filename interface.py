@@ -54,17 +54,23 @@ def prompt_short_answer() -> str:
             console.print(f"❌ [bold red]Error: {e} Por favor, inténtelo de nuevo.[/bold red]\n ")
 
 def prompt_closed_question(choices: any) -> str:
-    try:
+    def validate_answer(answer: str) -> bool:
+        """Valida si la respuesta del usuario es una opción válida."""
+        return answer in choices
+    
+    while True:
         questions = [
             inquirer.List('answer',
                            message="Tu respuesta es",
                            choices=choices),
         ]
         answers = inquirer.prompt(questions)
-        return answers['answer']
-    except KeyError:
-        console.print(f"❌ [bold red]Error: seleccione una opción válida ({', '.join(choices)}).[/bold red]\n ")
-        return prompt_closed_question(choices)
+        answer = answers['answer']
+        
+        if validate_answer(answer):
+            return answer
+        else:
+            console.print(f"❌ [bold red]Error: seleccione una opción válida ({', '.join(choices)}).[/bold red]\n ")
 
 if __name__ == '__main__':
     print(interfaz_select_question_types())
