@@ -1,6 +1,9 @@
 # Interview Practice Assistant using GPT API
 This is an interview practice assistant designed to help job candidates prepare for job interviews using the GPT API. The application uses natural language processing and machine learning to simulate real job interview questions and provide personalized feedback to help candidates improve their performance.
 
+![entrenate_bot](entrenate_bot.gif)
+
+
 ## Installation
 
 Before getting started, make sure you have the following installed:
