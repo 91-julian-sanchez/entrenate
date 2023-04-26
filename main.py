@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv
 import openai
-from interface import interfaz_select_question_types
-from interface import prompt_closed_question
-from interface import prompt_short_answer
+from interface import (
+    interfaz_select_question_types,
+    prompt_closed_question,
+    prompt_short_answer,
+)
  
 load_dotenv()  # take environment variables from .env.
 lang='Spanish'
@@ -31,6 +33,18 @@ def __chat_completion_create(messages):
     print(f"{response_content}\n")
     return response_content
     
+def handle_user_response(type_question, messages):
+    if type_question == '"yes or no" option':
+        content = prompt_closed_question(choices=["Si", "No"])
+        messages.append({"role": "user", "content": f"La respuesta es {content}?"})
+    elif type_question == 'multiple choice question with only one answer':
+        content = prompt_closed_question(choices=["A", "B", "C", "D"])
+        messages.append({"role": "user", "content": f"La respuesta es la opción {content}?"})
+    else:
+        content = prompt_short_answer()
+        messages.append({"role": "user", "content": f"La respuesta es: {content}?"})
+    return messages
+
 def assistant_chatbot(selected_type_question):
     context = {"role": "system", "content": system_context()}
     messages = [context]
@@ -39,19 +53,8 @@ def assistant_chatbot(selected_type_question):
             messages.append({"role": "user", "content": user_question(type_question[1])})
             response_content = __chat_completion_create(messages)
             messages.append({"role": "assistant", "content": response_content})
-
-            if type_question[1] in '"yes or no" option':
-                content = prompt_closed_question(choices=['Si', 'No'])
-                messages.append({"role": "user", "content": f"la respuesta es {content} ?"})
-                __chat_completion_create(messages)
-            elif type_question[1] in 'multiple choice question with only one answer':
-                content = prompt_closed_question(choices=['A', 'B', 'C', 'D'])
-                messages.append({"role": "user", "content": f"la respuesta es la opción {content} ?"})
-                __chat_completion_create(messages)
-            else:
-                content = prompt_short_answer()
-                messages.append({"role": "user", "content": f"la respuesta es: {content} ?"})
-                __chat_completion_create(messages)
+            messages = handle_user_response(type_question[1], messages)
+            __chat_completion_create(messages)
 
 if __name__ == '__main__':
     openai.api_key = os.getenv("CHATGPT_API_KEY")
