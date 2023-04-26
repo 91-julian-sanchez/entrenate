@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import openai
-from interface import run as interface_run
+from interface import interfaz_select_question_types
  
 load_dotenv()  # take environment variables from .env.
 lang='Spanish'
@@ -36,9 +36,5 @@ def assistant_chatbot(selected_type_question):
 if __name__ == '__main__':
     openai.api_key = os.getenv("CHATGPT_API_KEY")
 
-    selected_values = []
-
-    for option in interface_run():
-        selected_values.append(types_questions_dict[option])
-
-    assistant_chatbot(selected_values)
+    selected_question_types = [types_questions_dict[option] for option in interfaz_select_question_types()]
+    assistant_chatbot(selected_question_types)

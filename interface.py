@@ -9,7 +9,7 @@ choices_dict = {
     'short_answer': 'Preguntas abiertas de respuesta corta ✏️'
 }
 
-def select_questions():
+def menu_select_question_types():
     questions = [
         Checkbox('preguntas',
                 message='Selecciona el tipo de preguntas que prefieres responder',
@@ -20,9 +20,9 @@ def select_questions():
         return False
     return answers['preguntas']
 
-def run():
+def interfaz_select_question_types():
     while True:
-        selected_options = select_questions()
+        selected_options = menu_select_question_types()
         if not selected_options:
             console.print("❌ [bold red]Error: selecciona una opción válida.[/bold red]\n ")
             continue
@@ -37,4 +37,4 @@ def run():
     return selected_options
 
 if __name__ == '__main__':
-    print(run())
+    print(interfaz_select_question_types())
