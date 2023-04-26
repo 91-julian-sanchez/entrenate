@@ -2,8 +2,7 @@ import os
 from dotenv import load_dotenv
 import openai
 from interface import interfaz_select_question_types
-from interface import prompt_yes_or_no_answer
-from interface import prompt_multiple_choice_answer
+from interface import prompt_closed_question
 from interface import prompt_short_answer
  
 load_dotenv()  # take environment variables from .env.
@@ -42,11 +41,11 @@ def assistant_chatbot(selected_type_question):
             messages.append({"role": "assistant", "content": response_content})
 
             if type_question[1] in '"yes or no" option':
-                content = prompt_yes_or_no_answer()
+                content = prompt_closed_question(choices=['Si', 'No'])
                 messages.append({"role": "user", "content": f"la respuesta es {content} ?"})
                 __chat_completion_create(messages)
             elif type_question[1] in 'multiple choice question with only one answer':
-                content = prompt_multiple_choice_answer()
+                content = prompt_closed_question(choices=['A', 'B', 'C', 'D'])
                 messages.append({"role": "user", "content": f"la respuesta es la opción {content} ?"})
                 __chat_completion_create(messages)
             else:

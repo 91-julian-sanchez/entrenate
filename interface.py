@@ -37,52 +37,37 @@ def interfaz_select_question_types():
 
     return selected_options
 
-def prompt_yes_or_no_answer() -> str:
-    questions = [
-    inquirer.List('yes_or_no',
-                    message="Tu respuesta es",
-                    choices=['Si', 'No'],
-                ),
-    ]
-    try:
-        answers = inquirer.prompt(questions)
-        return answers['yes_or_no']
-    except KeyError:
-        console.print("❌ [bold red]Error: seleccione una opción válida ('Si' o 'No').[/bold red]\n ")
-        return prompt_yes_or_no_answer()
-
-def prompt_multiple_choice_answer() -> str:
-    questions = [
-    inquirer.List('multiple_choice',
-                    message="Tu respuesta es",
-                    choices=['A', 'B', 'C', 'D'],
-                ),
-    ]
-    try:
-        answers = inquirer.prompt(questions)
-        return answers['multiple_choice']
-    except KeyError:
-        console.print("❌ [bold red]Error: seleccione una opción válida (A, B, C o D).[/bold red]\n ")
-        return prompt_multiple_choice_answer()
-
 def prompt_short_answer() -> str:
     while True:
         try:
             questions = [
-                inquirer.Text('short_answer', message="?"),
+                inquirer.Text('short_answer', message="Tu respuesta es"),
             ]
             answers = inquirer.prompt(questions)
             short_answer = answers['short_answer'].strip()  # elimina espacios en blanco al principio y al final
             if len(short_answer) == 0:
                 raise ValueError("La respuesta no puede estar vacía.")
-            elif len(short_answer) > 100:
+            elif len(short_answer) > 280:
                 raise ValueError("La respuesta es demasiado larga (máximo 100 caracteres).")
             return short_answer
         except (KeyError, ValueError) as e:
             console.print(f"❌ [bold red]Error: {e} Por favor, inténtelo de nuevo.[/bold red]\n ")
 
+def prompt_closed_question(choices: any) -> str:
+    try:
+        questions = [
+            inquirer.List('answer',
+                           message="Tu respuesta es",
+                           choices=choices),
+        ]
+        answers = inquirer.prompt(questions)
+        return answers['answer']
+    except KeyError:
+        console.print(f"❌ [bold red]Error: seleccione una opción válida ({', '.join(choices)}).[/bold red]\n ")
+        return prompt_closed_question(choices)
+
 if __name__ == '__main__':
     print(interfaz_select_question_types())
-    print(prompt_yes_or_no_answer())
-    print(prompt_multiple_choice_answer())
     print(prompt_short_answer())
+    print(prompt_closed_question(choices=['Si', 'No']))
+    print(prompt_closed_question(choices=['A', 'B', 'C', 'D']))
