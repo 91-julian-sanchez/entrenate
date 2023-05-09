@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 import openai
 from interface import (
@@ -18,15 +19,25 @@ types_questions_dict = {
     'short_answer': ('Preguntas abiertas de respuesta corta ✏️', 'open-ended and short answer')
 }
 
+def log_decorator(func):
+    logging.basicConfig(filename='app.log', level=logging.INFO)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        logging.info(f"Call to function {func.__name__}. Result: {result}")
+        return result
+    return wrapper
+
+@log_decorator
 def system_context():
     return f"You are an {assistant_role} assistant. You use a tone that is technical. The questions and answers generated should be easy to understand for a {user_level} {user_role}. gives the answers only in {lang}."
 
+@log_decorator
 def user_question(type_question):
     return f"Can you ask me a question about programming basics?. the question must be a {type_question}"
 
-def __chat_completion_create(messages):
+def __chat_completion_create(messages, model="gpt-3.5-turbo"):
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=model,
         messages=messages
     )
     response_content = response.choices[0].message.content
