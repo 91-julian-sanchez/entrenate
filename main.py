@@ -10,6 +10,7 @@ from interface import (
  
 load_dotenv()  # take environment variables from .env.
 lang='Spanish'
+structured_output=f"""Provide them in JSON format with the following keys: question, answer_options, if the question is "open-ended", the value of answer_options must be None."""
 assistant_role='Tech Recruiter'
 user_role='Developer'
 user_level='junior'
@@ -21,11 +22,11 @@ types_questions_dict = {
 
 @log_decorator
 def system_context():
-    return f"You are an {assistant_role} assistant. You use a tone that is technical. The questions and answers generated should be easy to understand for a {user_level} {user_role}. gives the answers only in {lang}."
+    return f"""You are an {assistant_role} assistant. You use a tone that is technical. The questions and answers generated should be easy to understand for a {user_level} {user_role}. gives the answers only in {lang}."""
 
 @log_decorator
-def user_question(type_question):
-    return f"Can you ask me a question about programming basics?. the question must be a {type_question}"
+def build_user_question(type_question):
+    return f"""Can you ask me a question about programming basics?. the question must be a '{type_question}'. {structured_output}"""
 
 @log_decorator
 def __chat_completion_create(messages, model="gpt-3.5-turbo"):
@@ -53,7 +54,7 @@ def assistant_chatbot(selected_type_question):
     messages = [context]
     for type_question in selected_type_question:
         if os.getenv('ASSISTANT_ENABLED') == 'True':
-            messages.append({"role": "user", "content": user_question(type_question[1])})
+            messages.append({"role": "user", "content": build_user_question(type_question[1])})
             response_content = __chat_completion_create(messages)
             print(f"{response_content}\n")
             messages.append({"role": "assistant", "content": response_content})
