@@ -21,7 +21,7 @@ def menu_select_question_types():
         return False
     return answers['preguntas']
 
-def interfaz_select_question_types():
+def display_select_question_types():
     while True:
         selected_options = menu_select_question_types()
         if not selected_options:
@@ -37,7 +37,7 @@ def interfaz_select_question_types():
 
     return selected_options
 
-def prompt_short_answer() -> str:
+def display_prompt_short_answer() -> str:
     while True:
         try:
             questions = [
@@ -53,7 +53,7 @@ def prompt_short_answer() -> str:
         except (KeyError, ValueError) as e:
             console.print(f"❌ [bold red]Error: {e} Por favor, inténtelo de nuevo.[/bold red]\n ")
 
-def prompt_closed_question(choices: any) -> str:
+def display_prompt_closed_question(choices: any) -> str:
     def validate_answer(answer: str) -> bool:
         """Valida si la respuesta del usuario es una opción válida."""
         return answer in choices
@@ -73,7 +73,7 @@ def prompt_closed_question(choices: any) -> str:
             console.print(f"❌ [bold red]Error: seleccione una opción válida ({', '.join(choices)}).[/bold red]\n ")
 
 if __name__ == '__main__':
-    print(interfaz_select_question_types())
-    print(prompt_short_answer())
-    print(prompt_closed_question(choices=['Si', 'No']))
-    print(prompt_closed_question(choices=['A', 'B', 'C', 'D']))
+    print(display_select_question_types())
+    print(display_prompt_short_answer())
+    print(display_prompt_closed_question(choices=['Si', 'No']))
+    print(display_prompt_closed_question(choices=['A', 'B', 'C', 'D']))
